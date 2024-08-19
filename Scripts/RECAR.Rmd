@@ -1,0 +1,212 @@
+---
+title: 'Evaluación RECAR (Registro de exportadores de carbón)'
+author: "Marco Curcio, Abi Riquelme"
+date: "2024-08-16"
+output: html_document
+---
+El proposito de este trabajo es evaluar el impacto de la implementación del RECAR (Registro de exportadores de carbón). Para esto vamos a ver el nivel de exportaciones de carbón tanto en toneladas como en miles de USD y su cambio a partir del 2012
+
+Cargo las librerias con las que voy a trabajar
+```{r setup, include=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(readxl)
+```
+Cargo el dataset
+```{r}
+carbon <- read_excel("/Users/ariquelme/Downloads/Exportaciones de Carbon vegetal stata.xlsx", sheet = "Datos Anuales")
+
+
+```
+Modifico el nombre de las columnas para que sea mas facil trabajar y agrego dos nuevas columnas, una indicando el peso en toneladas y el otro indicando en miles de dolares.
+```{r}
+carbon <- carbon %>% 
+  rename(
+    en_kg = `Peso Neto (Kg)`,
+    en_usd = `Monto FOB en u$s`
+    )
+
+carbon <- carbon %>%
+  mutate(ton = en_kg/1000,
+         miles_usd =en_usd/1000)
+```
+Creo el primer grafico, mostrando la evolución anual de las exportaciones de carbón en toneladas y graficando la tendencia.
+```{r}
+#indico el año de corte que divide las tendencias en dos. Previo y posterior a la implementación del RECAR
+cutoff <- 2012
+#armo el grafico
+ton_año <- ggplot(carbon, aes(año, ton,
+                    fill=factor(ifelse(año =="2012","Highlighted","Normal")))) + #le asigno una categoria a 2012 para diferenciarlo del resto de los años y poder colorearlo posteriormente
+  geom_bar(stat = "identity") +
+  geom_smooth(aes(group = año >= cutoff), #armo la linea de tendencia, utilizando una regresión lineal simple 
+              method = "lm",
+              color = "#E6B861",
+              alpha = 0.1) +
+  annotate("text", x = 2015, #agrego un texto y sombreado indicando cuando se implemento el RECAR
+  y = 100000, 
+  label = "Implementación del 
+  RECAR",
+  family = "montserrat",
+  size = 7) +
+  annotate("rect",xmin = 2012, xmax = 2018, ymin = 87000, ymax = 110000,
+  alpha = .1) +
+  scale_fill_manual(name = "año", values=c("#242C4F","#46658B")) + #agrego los colores
+  theme(legend.position = "none", #hago una serie de modificaciones en el tema para que pueda ser exportado como un .PNG transparente
+        panel.background = element_rect(fill='transparent'), 
+        plot.background = element_rect(fill='transparent', color=NA), 
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        legend.background = element_rect(fill='transparent'),
+        legend.box.background = element_rect(fill='transparent'),
+        text = element_text(size = 14,family = "montserrat")) + 
+  scale_x_continuous(breaks = seq(2002, 2024, by = 2)) + 
+  labs(title = "Exportaciones de carbón vegetal (toneladas) ", #agrego el titulo
+      caption = "Datos hasta junio del 2024
+      Fuente: Elaboración propia en base a datos del INDEC") +
+  ylab("Toneladas") +
+  xlab("Año")
+#guardo el grafico
+ggsave('ton_año.png',
+       ton_año,
+       bg='transparent',
+        width = 16, 
+       height = 10)
+
+ton_año
+```
+El segundo grafico indica la evolución de exportaciones pero en miles de dolares, tambien indicando la tendencia usando una regresión simple.
+```{r}
+#el proceso es similar al del grafico anterior, solo que es con años y miles de dolares
+usd_año <- ggplot(carbon, aes(año, miles_usd,
+                    fill=factor(ifelse(año =="2012","Highlighted","Normal")))) +
+  geom_bar(stat = "identity", alpha = 1) +
+  geom_smooth(aes(group = año >= cutoff),
+              method = "lm",
+              color = "#E6B861",
+              alpha = 0.1) +
+  annotate("text", 
+  x = 2015, 
+  y = 35000, 
+  label = "Implementación del 
+  RECAR",
+  family = "montserrat",
+  size = 7) +
+  annotate("rect",xmin = 2012, xmax = 2018, ymin = 30000, ymax = 40000,
+  alpha = .1) +
+  scale_fill_manual(name = "año", values=c("#242C4F","#46658B")) +
+  theme(legend.position = "none",
+        panel.background = element_rect(fill='transparent'), 
+        plot.background = element_rect(fill='transparent', color=NA), 
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        legend.background = element_rect(fill='transparent'),
+        legend.box.background = element_rect(fill='transparent'),
+        text = element_text(size = 14,family = "montserrat")) + 
+  scale_x_continuous(breaks = seq(2002, 2024, by = 2)) +
+  labs(title = "Exportaciones de carbón vegetal (miles USD)",
+      caption = "Datos hasta junio del 2024
+      Fuente: Elaboración propia en base a datos del INDEC")+
+  ylab("Miles de Dolares") +
+  xlab("Año")
+
+ggsave('usd_año.png',
+       usd_año,
+       bg='transparent',
+        width = 16, 
+       height = 10) 
+
+usd_año
+```
+##Creación de modelos de regresión lineal y calculo de las pendientes.
+Se crearan dos modelos, uno haciendo referencia al periodo previo al 2012 y uno post 2012. Este proceso se hara tanto para los montos en miles de USD como para toneladas exportadas.
+
+Primero se carga y se limpia la base de datos.
+```{r}
+base <- read_excel("/Users/ariquelme/Downloads/Exportaciones de Carbon vegetal stata.xlsx", sheet = "Datos Mensuales")
+
+
+base$`en usd` <- base$`en usd`/1000
+base$year <- year(base$Fecha)
+base <- base %>%
+  dplyr::group_by(year) %>%
+  dplyr::summarise(
+    Cantidad_anual_Real = sum(`en usd`, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+Se divide a la base de datos en dos
+```{r}
+base <- base[order(base$year), ]
+
+cutoff <- "2012"
+```
+Se crean ambos modelos, donde la cantidad anual real es la variable dependiente y la independiente es el año, de esta manera podemos calcular la modificación año a año.
+```{r}
+# Dividir los datos en dos grupos: antes de 2012 y 2012 en adelante
+before_2012 <- base %>% filter(year < cutoff)
+after_2012 <- base %>% filter(year >= cutoff)
+
+# Ajustar un modelo lineal para cada grupo
+model_before_2012 <- lm(Cantidad_anual_Real ~ as.numeric(year), data = before_2012)
+model_after_2012 <- lm(Cantidad_anual_Real ~ as.numeric(year), data = after_2012)
+
+# Hago las predicciones para 2012 en adelante
+projected_after_2012 <- after_2012 %>% 
+  mutate(proj_ton = predict(model_before_2012, newdata = after_2012))
+
+slope_before_2012 <- coef(model_before_2012)[2]
+slope_after_2012 <- coef(model_after_2012)[2]
+
+mean_before_2012 <- mean(before_2012$Cantidad_anual_Real)
+mean_after_2012 <- mean(after_2012$Cantidad_anual_Real)
+
+# Calcular la tasa de crecimiento anual (en porcentaje)
+growth_rate_before_2012 <- (slope_before_2012 / mean_before_2012) * 100
+growth_rate_after_2012 <- (slope_after_2012 / mean_after_2012) * 100
+
+# Mostrar las tasas de crecimiento
+growth_rate_before_2012
+growth_rate_after_2012
+```
+Llevamos a cabo el mismo proceso pero analizando el monto importado en toneladas.
+```{r}
+# Calculo del coeficiente de la tendencia pre y post 2012 
+
+base <- read_excel("/Users/ariquelme/Downloads/Exportaciones de Carbon vegetal stata.xlsx", sheet = "Datos Mensuales")
+base$`en kg` <- base$`en kg`/1000
+base$year <- year(base$Fecha)
+base <- base %>%
+  dplyr::group_by(year) %>%
+  dplyr::summarise(
+    Cantidad_anual_Real = sum(`en kg`, na.rm = TRUE),
+    .groups = "drop"
+  )
+```
+
+```{r}
+base <- base[order(base$year), ]
+
+cutoff <- "2012"
+# Dividir los datos en dos grupos: antes de 2012 y 2012 en adelante
+before_2012 <- base %>% filter(year < cutoff)
+after_2012 <- base %>% filter(year >= cutoff)
+
+# Ajustar un modelo lineal para cada grupo
+model_before_2012 <- lm(Cantidad_anual_Real ~ as.numeric(year), data = before_2012)
+model_after_2012 <- lm(Cantidad_anual_Real ~ as.numeric(year), data = after_2012)
+
+slope_before_2012 <- coef(model_before_2012)[2]
+slope_after_2012 <- coef(model_after_2012)[2]
+
+mean_before_2012 <- mean(before_2012$Cantidad_anual_Real)
+mean_after_2012 <- mean(after_2012$Cantidad_anual_Real)
+
+# Calcular la tasa de crecimiento anual (en porcentaje)
+growth_rate_before_2012 <- (slope_before_2012 / mean_before_2012) * 100
+growth_rate_after_2012 <- (slope_after_2012 / mean_after_2012) * 100
+
+# Mostrar las tasas de crecimiento
+growth_rate_before_2012
+growth_rate_after_2012
+```
+
