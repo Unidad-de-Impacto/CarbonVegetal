@@ -1,0 +1,13 @@
+		(1)	(2)
+VARIABLES	LABELS	PesoNetoTn	PesoNetoTn
+			
+treat	treat	-4,541.13***	1,534.54***
+		(1,211.71)	(303.01)
+t	t	23.07	26.05***
+		(17.92)	(4.47)
+treat_t	treat_t	-27.40	-33.35***
+		(18.41)	(4.61)
+Constant	Constant	10,781.27***	1,336.98***
+		(886.13)	(202.73)
+			
+Observations		258	258
