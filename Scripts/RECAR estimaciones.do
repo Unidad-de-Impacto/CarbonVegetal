@@ -36,10 +36,10 @@ gen t=_n
 gen treat=0
 replace treat=1 if Fecha>=mdy(9,1,2012)
 
-*Nuestra variable de interés en la estimación se define como la interacción entre la variable de tratamiento y la tendencia:
+*Agregamos un control más a la estimación que se define como la interacción entre la variable de tratamiento y la tendencia:
 gen treat_t=treat*t
 
-*A continuación se presentan las estimaciones, siguiendo un modelo de "Before and After" con tendencia temporal. En todos las especificaciones presentados, tanto con frecuencia mensual o anual de los datos, el coeficiente asociado con "treat_t" es negativo y estadísticamente significativo.
+*A continuación se presentan las estimaciones, siguiendo un modelo de "Before and After" con tendencia temporal. En todos las especificaciones presentadas, tanto con frecuencia mensual o anual de los datos, el coeficiente asociado con "treat" es negativo y estadísticamente significativo.
 
 *** Variación Mensual ***
 format _all %20.0g
