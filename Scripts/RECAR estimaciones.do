@@ -9,7 +9,7 @@ clear all
 set more off
 
 else if  "`c(username)'" == "Usuario" {
-	global main "C:\Users\Usuario\Desktop\Trabajo - UdeSA\Trabajo - Ministerio\Evaluación RECAR"
+	global main "direccion"
 }
 
 *Crear carpetas de "input" (donde estará la base de datos) y "output" (para las tablas):
