@@ -1,15 +1,15 @@
 		(1)	(2)
-VARIABLES	LABELS	Peso Neto (Tn)	Monto FOB en miles (USD)
+VARIABLES	LABELS	Peso Neto (Tn)	Monto FOB (Millones de USD)
 			
-treat	Tratamiento	-4,541.13***	1,534.54***
-		(733.72)	(187.04)
-t	Tendencia	23.07**	26.05***
-		(9.55)	(2.49)
-treat_t	Tratamiento*Tendencia	-27.40***	-33.35***
-		(9.97)	(2.60)
+treat	Tratamiento	-4,541.13***	1.53***
+		(733.72)	(0.19)
+t	Tendencia	23.07**	0.03***
+		(9.55)	(0.00)
+treat_t	Tratamiento*Tendencia	-27.40***	-0.03***
+		(9.97)	(0.00)
 			
 Observations		258	258
 R-squared		0.68	0.68
-Errores esta'ndar en pare'ntesis			
+Errores estandar entre parentesis			
 *** p<0.01, ** p<0.05, * p<0.1			
-El efecto promedio total de la poli'tica sobre el monto FOB en el primer mes tratado es negativo, con un valor de -2367.9602			
+El efecto promedio total de la politica sobre el monto FOB en el primer mes tratado es negativo, con un valor de -2.37			
