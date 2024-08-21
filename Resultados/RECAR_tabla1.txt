@@ -1,16 +1,15 @@
 		(1)	(2)
-VARIABLES	LABELS	PesoNetoTn	MontoFOBenmilus
+VARIABLES	LABELS	Peso Neto (Tn)	Monto FOB en miles (USD)
 			
-treat	treat	-4,541.13***	1,534.54***
+treat	Tratamiento	-4,541.13***	1,534.54***
 		(733.72)	(187.04)
-t	t	23.07**	26.05***
+t	Tendencia	23.07**	26.05***
 		(9.55)	(2.49)
-treat_t	treat_t	-27.40***	-33.35***
+treat_t	Tratamiento*Tendencia	-27.40***	-33.35***
 		(9.97)	(2.60)
-Constant	Constant	10,781.27***	1,336.98***
-		(512.98)	(115.03)
 			
 Observations		258	258
 R-squared		0.68	0.68
-Robust standard errors in parentheses			
+Errores esta'ndar en pare'ntesis			
 *** p<0.01, ** p<0.05, * p<0.1			
+El efecto promedio total de la poli'tica sobre el monto FOB en el primer mes tratado es negativo, con un valor de -2367.9602			

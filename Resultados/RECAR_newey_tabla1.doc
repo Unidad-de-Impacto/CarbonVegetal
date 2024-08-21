@@ -1,20 +1,22 @@
 {\rtf1\fs24
-\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx1872\clbrdrt\brdrs\cellx3744\clbrdrt\brdrs\cellx5472
+\trowd\trgaph75\trleft-75\intbl\trqc\clbrdrt\brdrs\cellx3168\clbrdrt\brdrs\cellx5328\clbrdrt\brdrs\cellx8928
 \ql \cell\qc (1)\cell\qc (2)\cell\row
-\trowd\trgaph75\trleft-75\trqc\cellx1872\cellx3744\cellx5472
-\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx1872\clbrdrb\brdrs\cellx3744\clbrdrb\brdrs\cellx5472
-\ql VARIABLES\cell\qc PesoNetoTn\cell\qc PesoNetoTn\cell\row
-\trowd\trgaph75\trleft-75\trqc\cellx1872\cellx3744\cellx5472
+\trowd\trgaph75\trleft-75\trqc\cellx3168\cellx5328\cellx8928
+\trowd\trgaph75\trleft-75\trqc\clbrdrb\brdrs\cellx3168\clbrdrb\brdrs\cellx5328\clbrdrb\brdrs\cellx8928
+\ql VARIABLES\cell\qc Peso Neto (Tn)\cell\qc Monto FOB en miles (USD)\cell\row
+\trowd\trgaph75\trleft-75\trqc\cellx3168\cellx5328\cellx8928
 \ql \cell\qc \cell\qc \cell\row
-\ql treat\cell\qc -4,541.13***\cell\qc 1,534.54***\cell\row
+\ql Tratamiento\cell\qc -4,541.13***\cell\qc 1,534.54***\cell\row
 \ql \cell\qc (1,211.71)\cell\qc (303.01)\cell\row
-\ql t\cell\qc 23.07\cell\qc 26.05***\cell\row
+\ql Tendencia\cell\qc 23.07\cell\qc 26.05***\cell\row
 \ql \cell\qc (17.92)\cell\qc (4.47)\cell\row
-\ql treat_t\cell\qc -27.40\cell\qc -33.35***\cell\row
+\ql Tratamiento*Tendencia\cell\qc -27.40\cell\qc -33.35***\cell\row
 \ql \cell\qc (18.41)\cell\qc (4.61)\cell\row
-\ql Constant\cell\qc 10,781.27***\cell\qc 1,336.98***\cell\row
-\ql \cell\qc (886.13)\cell\qc (202.73)\cell\row
 \ql \cell\qc \cell\qc \cell\row
-\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx1872\clbrdrb\brdrs\cellx3744\clbrdrb\brdrs\cellx5472
+\trowd\trgaph75\trleft-75\trqc\trbrdrb\brdrs\clbrdrb\brdrs\cellx3168\clbrdrb\brdrs\cellx5328\clbrdrb\brdrs\cellx8928
 \ql Observations\cell\qc 258\cell\qc 258\cell\row
+\pard\qc
+Errores esta'ndar consistentes con heterocedasticidad y autocorrelacio'n de Newey y West entre pare'ntesis\par
+*** p<0.01, ** p<0.05, * p<0.1\par
+El efecto promedio total de la poli'tica sobre el monto FOB en el primer mes tratado es negativo, con un valor de -2367.9602\par
 }
