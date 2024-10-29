@@ -1,6 +1,5 @@
 ---
 title: 'Evaluación RECAR (Registro de exportadores de carbón)'
-author: "Marco Curcio, Abi Riquelme"
 date: "2024-08-16"
 output: html_document
 ---
